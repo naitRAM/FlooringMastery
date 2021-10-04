@@ -8,7 +8,7 @@ import java.util.Scanner;
 
 /**
  *
- * @author Rami Mansieh email: rmansieh@gmail.com data: Aug. 18, 2021 purpose:
+ * @author Rami Mansieh (only the last 4 methods) email: rmansieh@gmail.com data: Aug. 18, 2021 purpose:
  */
 public class UserIOConsoleImpl implements UserIO {
 
@@ -230,7 +230,7 @@ public class UserIOConsoleImpl implements UserIO {
 
     @Override
     public BigDecimal readBigDecimal(String msgPrompt) {
-        BigDecimal result = new BigDecimal("0");
+        BigDecimal result = null;
         String valueString;
         boolean notValid = true;
         while (notValid) {
@@ -247,7 +247,7 @@ public class UserIOConsoleImpl implements UserIO {
     
     @Override
     public BigDecimal readBigDecimalGreaterOrEqual(String msgPrompt, BigDecimal inclusiveMin) {
-        BigDecimal result = new BigDecimal("0");
+        BigDecimal result = null;
         String valueString;
         boolean notValid = true;
         boolean notInRange = true;
@@ -272,7 +272,7 @@ public class UserIOConsoleImpl implements UserIO {
     
     @Override
     public LocalDate readLocalDate(String msgPrompt) {
-        LocalDate date = LocalDate.now();
+        LocalDate date = null;
         String dateString;
         Boolean invalidDate = true;
         do {
@@ -289,7 +289,7 @@ public class UserIOConsoleImpl implements UserIO {
     
     @Override
     public LocalDate readFutureLocalDate(String msgPrompt) {
-        LocalDate date = LocalDate.now();
+        LocalDate date = null;
         String dateString;
         Boolean invalidDate = true;
         do {

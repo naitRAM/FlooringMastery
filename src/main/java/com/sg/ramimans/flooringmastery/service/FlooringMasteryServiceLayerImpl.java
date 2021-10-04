@@ -27,30 +27,30 @@ public class FlooringMasteryServiceLayerImpl {
         this.productDao = productDao;
         this.statesDao = statesDao;
     }
-    
+
     public void validateOrderDate(LocalDate date) throws InvalidDateException {
         if (!LocalDate.now().isBefore(date)) {
             throw new InvalidDateException("Order date not in future");
         }
     }
-    
+
     public void validateCustomerName(Order customerOrder) throws InvalidCustomerNameException {
-        if (! customerOrder.getCustomerName().matches("^[A-Za-z0-9.,]+$")) {
+        if (!customerOrder.getCustomerName().matches("^[A-Za-z0-9.,]+$")) {
             throw new InvalidCustomerNameException("Customer name format is invalid");
         };
     }
-    
+
     public void validateSquareFootage(Order customerOrder) throws InsufficientAreaException {
         if (customerOrder.getArea().compareTo(new BigDecimal("100")) < 0) {
             throw new InsufficientAreaException("Square footage must be 100 sq ft or more");
         };
     }
+
     public Order processNewOrder(Order order, LocalDate date) throws InvalidDateException, InsufficientAreaException, InvalidStateException, DaoException, InvalidProductException, InvalidCustomerNameException {
-            this.validateOrderDate(date);
-            this.validateCustomerName(order);
-            this.validateSquareFootage(order);
-        
-        
+        this.validateOrderDate(date);
+        this.validateCustomerName(order);
+        this.validateSquareFootage(order);
+
         StateTax state = this.getState(order.getStateCode());
         Product product = this.getProduct(order.getProductName());
         Order newOrder = new Order(order.getCustomerName(), state, product, order.getArea());
@@ -58,12 +58,32 @@ public class FlooringMasteryServiceLayerImpl {
 
     }
 
-    public StateTax getState(String stateCode) throws DaoException, InvalidStateException {
-        StateTax state = statesDao.getState(stateCode);
-        if (state == null) {
-            throw new InvalidStateException("Orders cannot be processed for state " + stateCode);
+    public Order editOrder(Order order, LocalDate date) throws DaoException, OrderNotFoundException, InvalidProductException, InvalidStateException, InsufficientAreaException, InvalidDateException {
+        this.validateOrderDate(date);
+        this.validateSquareFootage(order);
+        Order orderToEdit = this.getOrder(Integer.toString(order.getOrderId()), date);
+        Product newProduct = this.getProduct(order.getProductName());
+        StateTax newState = this.getState(order.getStateCode());
+        BigDecimal newArea = order.getArea().setScale(2, RoundingMode.HALF_UP);
+        orderToEdit.setArea(newArea);
+        orderToEdit.setNewState(newState);
+        orderToEdit.setNewProduct(newProduct);
+        orderToEdit.setCustomerName(order.getCustomerName());
+        return orderDao.editOrder(orderToEdit, date);
+    }
+
+    public Order deleteOrder(Order order, LocalDate date) throws DaoException, OrderNotFoundException {
+        Order orderToDelete = this.getOrder(Integer.toString(order.getOrderId()), date);
+        Order deletedOrder = orderDao.deleteOrder(Integer.toString(order.getOrderId()), date);
+        return deletedOrder;
+    }
+
+    public Order getOrder(String orderId, LocalDate date) throws DaoException, OrderNotFoundException {
+        Order queryOrder = orderDao.getOrder(orderId, date);
+        if (queryOrder == null) {
+            throw new OrderNotFoundException("Could not find order with order ID " + orderId);
         }
-        return state;
+        return queryOrder;
     }
 
     public Product getProduct(String productName) throws DaoException, InvalidProductException {
@@ -74,12 +94,12 @@ public class FlooringMasteryServiceLayerImpl {
         return product;
     }
 
-    public Collection<Product> getAllProducts() throws DaoException {
-        return productDao.getAllProducts();
-    }
-
-    public Collection<StateTax> getAllStates() throws DaoException {
-        return statesDao.getAllStates();
+    public StateTax getState(String stateCode) throws DaoException, InvalidStateException {
+        StateTax state = statesDao.getState(stateCode);
+        if (state == null) {
+            throw new InvalidStateException("Orders cannot be processed for state " + stateCode);
+        }
+        return state;
     }
 
     public Collection<Order> getAllOrders(LocalDate date) throws NoRecordsException {
@@ -95,31 +115,13 @@ public class FlooringMasteryServiceLayerImpl {
         return orders;
 
     }
-    
-    public Order getOrder(String orderId, LocalDate date) throws DaoException, OrderNotFoundException { 
-        Order queryOrder = orderDao.getOrder(orderId, date);
-        if (queryOrder == null) {
-            throw new OrderNotFoundException("Could not find order with order ID " + orderId);
-        }
-        return queryOrder;
+
+    public Collection<Product> getAllProducts() throws DaoException {
+        return productDao.getAllProducts();
     }
-    public Order editOrder(Order order, LocalDate date) throws DaoException, OrderNotFoundException, InvalidProductException, InvalidStateException, InsufficientAreaException, InvalidDateException {
-        this.validateOrderDate(date);
-        this.validateSquareFootage(order);
-        Order orderToEdit = this.getOrder(Integer.toString(order.getOrderId()), date);
-        Product newProduct = this.getProduct(order.getProductName());
-        StateTax newState = this.getState(order.getStateCode());
-        BigDecimal newArea = order.getArea().setScale(2, RoundingMode.HALF_UP);
-        orderToEdit.setArea(newArea);
-        orderToEdit.setNewState(newState);
-        orderToEdit.setNewProduct(newProduct);
-        orderToEdit.setCustomerName(order.getCustomerName());
-        return orderDao.editOrder(orderToEdit, date);
+
+    public Collection<StateTax> getAllStates() throws DaoException {
+        return statesDao.getAllStates();
     }
-    
-    public Order deleteOrder (Order order, LocalDate date) throws DaoException, OrderNotFoundException {
-        Order orderToDelete = this.getOrder(Integer.toString(order.getOrderId()), date);
-        Order deletedOrder = orderDao.deleteOrder(Integer.toString(order.getOrderId()), date);
-        return deletedOrder;
-    }
+
 }

@@ -66,7 +66,7 @@ public class FlooringMasteryView {
             orderProduct = this.getProduct(products, productName);
         }
         
-        BigDecimal area = io.readBigDecimalGreaterOrEqual("Enter area greater than 100 sq ft: ", new BigDecimal("100"));
+        BigDecimal area = io.readBigDecimalGreaterOrEqual("Enter area (minimum of 100 sq ft): ", new BigDecimal("100"));
         Order newOrder = new Order(customerName, orderState, orderProduct, area);
         return newOrder;
     }
