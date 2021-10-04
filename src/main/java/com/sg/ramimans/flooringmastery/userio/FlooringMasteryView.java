@@ -85,6 +85,8 @@ public class FlooringMasteryView {
         }
     }
     
+    
+    
     public Order getEditedOrder(Collection<Order> orders, Collection<StateTax> states, Collection<Product> products) {
         
         this.displayAllOrders(orders);
@@ -108,7 +110,7 @@ public class FlooringMasteryView {
             if (editedStateCode.isBlank()) {
                 state = this.getState(states, validOrder.getStateCode());
             } else {
-            state = this.getState(states, editedStateCode);
+                state = this.getState(states, editedStateCode);
             }
         }
         
@@ -134,6 +136,7 @@ public class FlooringMasteryView {
                 try {
                     area = new BigDecimal(areaString).setScale(2, RoundingMode.HALF_UP);
                     if (area.compareTo(new BigDecimal("100")) < 0) {
+                        io.print(area + " is less than 100");
                         area = null;
                     }
                 } catch (NumberFormatException e) {
@@ -147,6 +150,16 @@ public class FlooringMasteryView {
         validOrder.setNewProduct(product);
         validOrder.setArea(area);
         
+        return validOrder;
+    }
+    
+    public Order getOrderToDelete(Collection<Order> orders) {
+        this.displayAllOrders(orders);
+        Order validOrder = null;
+        while (validOrder == null) {
+            int orderId = io.readInt("Enter valid order number to delete: ");
+            validOrder = this.getOrder(orders, orderId);
+        }
         return validOrder;
     }
     

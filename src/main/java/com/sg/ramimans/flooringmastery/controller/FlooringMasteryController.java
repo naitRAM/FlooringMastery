@@ -11,6 +11,7 @@ import com.sg.ramimans.flooringmastery.service.OrderNotFoundException;
 import com.sg.ramimans.flooringmastery.model.Order;
 import com.sg.ramimans.flooringmastery.model.Product;
 import com.sg.ramimans.flooringmastery.model.StateTax;
+import com.sg.ramimans.flooringmastery.service.InvalidCustomerNameException;
 import com.sg.ramimans.flooringmastery.userio.FlooringMasteryView;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -51,10 +52,8 @@ public class FlooringMasteryController {
                 case 2:
                     try {
                     Order processedOrder = service.processNewOrder(view.getNewOrder(products, states), view.getFutureDate());
-
                     System.out.println("Success! Added order #" + processedOrder.getOrderId());
-
-                } catch (InvalidDateException | InvalidStateException | InvalidProductException | InsufficientAreaException e) {
+                } catch (InvalidDateException | InvalidStateException | InvalidProductException | InsufficientAreaException | InvalidCustomerNameException e) {
                     System.out.println(e.getMessage());
 
                 }
@@ -64,23 +63,15 @@ public class FlooringMasteryController {
                     LocalDate editDate = view.getFutureDate();
                     Order editedOrder = service.editOrder(view.getEditedOrder(service.getAllOrders(editDate), states, products), editDate);
                     System.out.println("Success! Edited order #" + editedOrder.getOrderId());
-                } catch (NoRecordsException | OrderNotFoundException | InvalidStateException | InvalidProductException | InsufficientAreaException e) {
+                } catch (NoRecordsException | OrderNotFoundException | InvalidStateException | InvalidDateException | InvalidProductException | InsufficientAreaException e) {
                     System.out.println(e.getMessage());
                 }
                 break;
                 case 4:
                     try {
-                    System.out.println("Enter order date in YYYY-MM-DD format: ");
-                    String userDateString = userInput.nextLine();
-                    LocalDate userDate = LocalDate.parse(userDateString);
-                    Collection<Order> orders = service.getAllOrders(userDate);
-                    for (Order order : orders) {
-                        System.out.println(order.getOrderId() + " " + order.getCustomerName() + " " + order.getTotal());
-                    }
-                    System.out.println("Enter order Id");
-                    String orderId = userInput.nextLine();
-                    Order orderToDelete = service.getOrder(orderId, userDate);
-                    Order deletedOrder = service.deleteOrder(orderToDelete, userDate);
+                    LocalDate deleteDate = view.getFutureDate();              
+                    Order orderToDelete = view.getOrderToDelete(service.getAllOrders(deleteDate));                 
+                    Order deletedOrder = service.deleteOrder(orderToDelete, deleteDate);
                     System.out.println("Success! Deleted order #" + deletedOrder.getOrderId());
                 } catch (NoRecordsException | OrderNotFoundException e) {
                     System.out.println(e.getMessage());

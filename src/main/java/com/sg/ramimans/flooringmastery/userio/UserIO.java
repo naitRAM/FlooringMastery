@@ -36,9 +36,11 @@ public interface UserIO {
 
     BigDecimal readBigDecimal(String prompt);
     
+    BigDecimal readBigDecimalGreaterOrEqual(String Prompt, BigDecimal min);
+    
     LocalDate readLocalDate(String prompt);
     
     LocalDate readFutureLocalDate(String prompt);
     
-    BigDecimal readBigDecimalGreaterOrEqual(String msgPrompt, BigDecimal inclusiveMin);
+    
 }

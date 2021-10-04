@@ -27,14 +27,29 @@ public class FlooringMasteryServiceLayerImpl {
         this.productDao = productDao;
         this.statesDao = statesDao;
     }
-
-    public Order processNewOrder(Order order, LocalDate date) throws InvalidDateException, InsufficientAreaException, InvalidStateException, DaoException, InvalidProductException {
+    
+    public void validateOrderDate(LocalDate date) throws InvalidDateException {
         if (!LocalDate.now().isBefore(date)) {
             throw new InvalidDateException("Order date not in future");
         }
-        if (order.getArea().compareTo(new BigDecimal("100")) < 0) {
+    }
+    
+    public void validateCustomerName(Order customerOrder) throws InvalidCustomerNameException {
+        if (! customerOrder.getCustomerName().matches("^[A-Za-z0-9.,]+$")) {
+            throw new InvalidCustomerNameException("Customer name format is invalid");
+        };
+    }
+    
+    public void validateSquareFootage(Order customerOrder) throws InsufficientAreaException {
+        if (customerOrder.getArea().compareTo(new BigDecimal("100")) < 0) {
             throw new InsufficientAreaException("Square footage must be 100 sq ft or more");
         };
+    }
+    public Order processNewOrder(Order order, LocalDate date) throws InvalidDateException, InsufficientAreaException, InvalidStateException, DaoException, InvalidProductException, InvalidCustomerNameException {
+            this.validateOrderDate(date);
+            this.validateCustomerName(order);
+            this.validateSquareFootage(order);
+        
         
         StateTax state = this.getState(order.getStateCode());
         Product product = this.getProduct(order.getProductName());
@@ -88,13 +103,12 @@ public class FlooringMasteryServiceLayerImpl {
         }
         return queryOrder;
     }
-    public Order editOrder(Order order, LocalDate date) throws DaoException, OrderNotFoundException, InvalidProductException, InvalidStateException, InsufficientAreaException {
+    public Order editOrder(Order order, LocalDate date) throws DaoException, OrderNotFoundException, InvalidProductException, InvalidStateException, InsufficientAreaException, InvalidDateException {
+        this.validateOrderDate(date);
+        this.validateSquareFootage(order);
         Order orderToEdit = this.getOrder(Integer.toString(order.getOrderId()), date);
         Product newProduct = this.getProduct(order.getProductName());
         StateTax newState = this.getState(order.getStateCode());
-        if (order.getArea().compareTo(new BigDecimal("100")) < 0) {
-            throw new InsufficientAreaException("Square footage must be 100 sq ft or more");
-        };
         BigDecimal newArea = order.getArea().setScale(2, RoundingMode.HALF_UP);
         orderToEdit.setArea(newArea);
         orderToEdit.setNewState(newState);
