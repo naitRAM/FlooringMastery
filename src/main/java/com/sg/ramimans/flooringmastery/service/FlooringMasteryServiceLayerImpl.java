@@ -1,8 +1,11 @@
 package com.sg.ramimans.flooringmastery.service;
 
 import com.sg.ramimans.flooringmastery.dao.DaoException;
+import com.sg.ramimans.flooringmastery.dao.OrderDao;
 import com.sg.ramimans.flooringmastery.dao.OrderDaoFileImpl;
+import com.sg.ramimans.flooringmastery.dao.ProductDao;
 import com.sg.ramimans.flooringmastery.dao.ProductDaoFileImpl;
+import com.sg.ramimans.flooringmastery.dao.StateTaxDao;
 import com.sg.ramimans.flooringmastery.dao.StateTaxDaoFileImpl;
 import com.sg.ramimans.flooringmastery.model.Order;
 import com.sg.ramimans.flooringmastery.model.Product;
@@ -16,36 +19,38 @@ import java.util.Collection;
  *
  * @author Rami Mansieh email: rmansieh@gmail.com data: Sep. 27, 2021 purpose:
  */
-public class FlooringMasteryServiceLayerImpl {
+public class FlooringMasteryServiceLayerImpl implements FlooringMasteryService {
 
-    private final OrderDaoFileImpl orderDao;
-    private final ProductDaoFileImpl productDao;
-    private final StateTaxDaoFileImpl statesDao;
+    private final OrderDao orderDao;
+    private final ProductDao productDao;
+    private final StateTaxDao statesDao;
 
-    public FlooringMasteryServiceLayerImpl(OrderDaoFileImpl orderDao, ProductDaoFileImpl productDao, StateTaxDaoFileImpl statesDao) {
+    public FlooringMasteryServiceLayerImpl(OrderDao orderDao, ProductDao productDao, StateTaxDao statesDao) {
         this.orderDao = orderDao;
         this.productDao = productDao;
         this.statesDao = statesDao;
     }
 
-    public void validateOrderDate(LocalDate date) throws InvalidDateException {
+    private void validateOrderDate(LocalDate date) throws InvalidDateException {
         if (!LocalDate.now().isBefore(date)) {
             throw new InvalidDateException("Order date not in future");
         }
     }
 
-    public void validateCustomerName(Order customerOrder) throws InvalidCustomerNameException {
-        if (!customerOrder.getCustomerName().matches("^[A-Za-z0-9.,]+$")) {
+    private void validateCustomerName(Order customerOrder) throws InvalidCustomerNameException {
+        if (! customerOrder.getCustomerName().matches("^[A-Za-z0-9.,]+$")) {
             throw new InvalidCustomerNameException("Customer name format is invalid");
         };
     }
 
-    public void validateSquareFootage(Order customerOrder) throws InsufficientAreaException {
+    private void validateSquareFootage(Order customerOrder) throws InsufficientAreaException {
         if (customerOrder.getArea().compareTo(new BigDecimal("100")) < 0) {
             throw new InsufficientAreaException("Square footage must be 100 sq ft or more");
         };
+    
     }
-
+    
+    @Override
     public Order processNewOrder(Order order, LocalDate date) throws InvalidDateException, InsufficientAreaException, InvalidStateException, DaoException, InvalidProductException, InvalidCustomerNameException {
         this.validateOrderDate(date);
         this.validateCustomerName(order);
@@ -58,9 +63,11 @@ public class FlooringMasteryServiceLayerImpl {
 
     }
 
-    public Order editOrder(Order order, LocalDate date) throws DaoException, OrderNotFoundException, InvalidProductException, InvalidStateException, InsufficientAreaException, InvalidDateException {
+    @Override
+    public Order editOrder(Order order, LocalDate date) throws DaoException, OrderNotFoundException, InvalidProductException, InvalidStateException, InsufficientAreaException, InvalidDateException, InvalidCustomerNameException {
         this.validateOrderDate(date);
         this.validateSquareFootage(order);
+        this.validateCustomerName(order);
         Order orderToEdit = this.getOrder(Integer.toString(order.getOrderId()), date);
         Product newProduct = this.getProduct(order.getProductName());
         StateTax newState = this.getState(order.getStateCode());
@@ -71,13 +78,15 @@ public class FlooringMasteryServiceLayerImpl {
         orderToEdit.setCustomerName(order.getCustomerName());
         return orderDao.editOrder(orderToEdit, date);
     }
-
+    
+    @Override
     public Order deleteOrder(Order order, LocalDate date) throws DaoException, OrderNotFoundException {
         Order orderToDelete = this.getOrder(Integer.toString(order.getOrderId()), date);
         Order deletedOrder = orderDao.deleteOrder(Integer.toString(order.getOrderId()), date);
         return deletedOrder;
     }
-
+    
+    @Override
     public Order getOrder(String orderId, LocalDate date) throws DaoException, OrderNotFoundException {
         Order queryOrder = orderDao.getOrder(orderId, date);
         if (queryOrder == null) {
@@ -85,7 +94,8 @@ public class FlooringMasteryServiceLayerImpl {
         }
         return queryOrder;
     }
-
+    
+    @Override
     public Product getProduct(String productName) throws DaoException, InvalidProductException {
         Product product = productDao.getProduct(productName);
         if (product == null) {
@@ -93,7 +103,8 @@ public class FlooringMasteryServiceLayerImpl {
         }
         return product;
     }
-
+    
+    @Override
     public StateTax getState(String stateCode) throws DaoException, InvalidStateException {
         StateTax state = statesDao.getState(stateCode);
         if (state == null) {
@@ -101,7 +112,8 @@ public class FlooringMasteryServiceLayerImpl {
         }
         return state;
     }
-
+    
+    @Override
     public Collection<Order> getAllOrders(LocalDate date) throws NoRecordsException {
         Collection<Order> orders;
         try {
@@ -115,11 +127,13 @@ public class FlooringMasteryServiceLayerImpl {
         return orders;
 
     }
-
+    
+    @Override
     public Collection<Product> getAllProducts() throws DaoException {
         return productDao.getAllProducts();
     }
-
+    
+    @Override
     public Collection<StateTax> getAllStates() throws DaoException {
         return statesDao.getAllStates();
     }

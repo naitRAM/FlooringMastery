@@ -18,7 +18,7 @@ import java.util.Scanner;
  * data: Sep. 27, 2021
  * purpose: 
  */
-public class ProductDaoFileImpl {
+public class ProductDaoFileImpl implements ProductDao {
     private final String DELIMITER = ",";
     private final String fileName;
     private Map<String, Product> products = new HashMap<>();
@@ -57,11 +57,13 @@ public class ProductDaoFileImpl {
         return new Product(productName, productRate, labourRate);
     }
     
+    @Override
     public Product getProduct(String productName) throws DaoException {
         this.readProducts();
         return this.products.get(productName);
     }
     
+    @Override
     public Collection<Product> getAllProducts() throws DaoException {
         this.readProducts();
         return this.products.values();

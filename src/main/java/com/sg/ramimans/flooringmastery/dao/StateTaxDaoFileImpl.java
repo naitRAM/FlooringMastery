@@ -18,7 +18,7 @@ import java.util.Scanner;
  * data: Sep. 27, 2021
  * purpose: 
  */
-public class StateTaxDaoFileImpl {
+public class StateTaxDaoFileImpl implements StateTaxDao {
     private String DELIMITER = ",";
     private String fileName;
     private Map<String, StateTax> states = new HashMap<>() ;
@@ -58,11 +58,13 @@ public class StateTaxDaoFileImpl {
         return new StateTax(stateCode, stateName, tax);
     }
     
+    @Override
     public StateTax getState(String stateCode) throws DaoException {
         this.loadStates();
         return this.states.get(stateCode);
     }
     
+    @Override
     public Collection<StateTax> getAllStates() throws DaoException{
         this.loadStates();
         return this.states.values();

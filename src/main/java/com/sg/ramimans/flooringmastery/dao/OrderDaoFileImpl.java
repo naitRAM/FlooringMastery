@@ -24,7 +24,7 @@ import java.util.Set;
  * data: Sep. 26, 2021
  * purpose: 
  */
-public class OrderDaoFileImpl {
+public class OrderDaoFileImpl implements OrderDao {
     public String inventoryFile;
     public static final String DELIMITER = "::";
     public final Map<String, Order> orders = new HashMap<>();
@@ -63,10 +63,7 @@ public class OrderDaoFileImpl {
         return new Order(orderNumber, customerName, state, taxRate, productType, costPerSquareFoot, labourCostPerSquareFoot, area);
     }
     
-    public Collection<Order> getAllOrders(LocalDate orderDate) throws DaoException {
-        this.loadOrders(orderDate);
-        return this.orders.values();
-    }
+    
     
     private void writeOrders(LocalDate date) throws DaoException {
         PrintWriter fileOutput;
@@ -104,6 +101,19 @@ public class OrderDaoFileImpl {
         return entry;
     }
     
+    @Override
+    public Order getOrder(String Id, LocalDate date) throws DaoException{
+        this.loadOrders(date);
+        return this.orders.get(Id);
+    }
+    
+    @Override
+    public Collection<Order> getAllOrders(LocalDate orderDate) throws DaoException {
+        this.loadOrders(orderDate);
+        return this.orders.values();
+    }
+    
+    @Override
     public Order addOrder(Order order, LocalDate date) throws DaoException{
         try {
             this.getAllOrders(date);
@@ -124,6 +134,7 @@ public class OrderDaoFileImpl {
         return order;
     }
     
+    @Override
     public Order deleteOrder(String Id, LocalDate date) throws DaoException {
         this.loadOrders(date);
         Order deletedOrder = this.orders.remove(Id);
@@ -131,6 +142,7 @@ public class OrderDaoFileImpl {
         return deletedOrder;
     }
     
+    @Override
     public Order editOrder(Order order, LocalDate date) throws DaoException {
         this.loadOrders(date);
         String orderId = Integer.toString(order.getOrderId());
@@ -142,8 +154,5 @@ public class OrderDaoFileImpl {
         return this.orders.get(orderId);
     }
     
-    public Order getOrder(String Id, LocalDate date) throws DaoException{
-        this.loadOrders(date);
-        return this.orders.get(Id);
-    }
+    
 }

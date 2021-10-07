@@ -11,6 +11,7 @@ import com.sg.ramimans.flooringmastery.service.OrderNotFoundException;
 import com.sg.ramimans.flooringmastery.model.Order;
 import com.sg.ramimans.flooringmastery.model.Product;
 import com.sg.ramimans.flooringmastery.model.StateTax;
+import com.sg.ramimans.flooringmastery.service.FlooringMasteryService;
 import com.sg.ramimans.flooringmastery.service.InvalidCustomerNameException;
 import com.sg.ramimans.flooringmastery.userio.FlooringMasteryView;
 import java.math.BigDecimal;
@@ -25,10 +26,10 @@ import java.util.Scanner;
  */
 public class FlooringMasteryController {
 
-    private FlooringMasteryServiceLayerImpl service;
+    private final FlooringMasteryService service;
     private final FlooringMasteryView view;
 
-    public FlooringMasteryController(FlooringMasteryServiceLayerImpl service, FlooringMasteryView view) {
+    public FlooringMasteryController(FlooringMasteryService service, FlooringMasteryView view) {
         this.service = service;
         this.view = view;
     }
@@ -59,7 +60,8 @@ public class FlooringMasteryController {
                         System.out.println("Success! Added order #" + processedOrder.getOrderId());
                     }
                     
-                } catch (InvalidDateException | InvalidStateException | InvalidProductException | InsufficientAreaException | InvalidCustomerNameException e) {
+                } catch (InvalidDateException | InvalidStateException | InvalidProductException 
+                        | InsufficientAreaException | InvalidCustomerNameException e) {
                     System.out.println(e.getMessage());
 
                 }
@@ -73,7 +75,9 @@ public class FlooringMasteryController {
                         System.out.println("Success! Edited order #" + processedOrder.getOrderId());
                     }
                     
-                } catch (NoRecordsException | OrderNotFoundException | InvalidStateException | InvalidDateException | InvalidProductException | InsufficientAreaException e) {
+                } catch (NoRecordsException | OrderNotFoundException | InvalidStateException | 
+                        InvalidDateException | InvalidProductException | InsufficientAreaException 
+                        | InvalidCustomerNameException e) {
                     System.out.println(e.getMessage());
                 }
                 break;

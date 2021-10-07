@@ -6,6 +6,10 @@ import com.sg.ramimans.flooringmastery.dao.ProductDaoFileImpl;
 import com.sg.ramimans.flooringmastery.dao.StateTaxDaoFileImpl;
 import com.sg.ramimans.flooringmastery.service.FlooringMasteryServiceLayerImpl;
 import com.sg.ramimans.flooringmastery.controller.FlooringMasteryController;
+import com.sg.ramimans.flooringmastery.dao.OrderDao;
+import com.sg.ramimans.flooringmastery.dao.ProductDao;
+import com.sg.ramimans.flooringmastery.dao.StateTaxDao;
+import com.sg.ramimans.flooringmastery.service.FlooringMasteryService;
 import com.sg.ramimans.flooringmastery.userio.FlooringMasteryView;
 import com.sg.ramimans.flooringmastery.userio.UserIO;
 import com.sg.ramimans.flooringmastery.userio.UserIOConsoleImpl;
@@ -20,10 +24,10 @@ public class App {
         
         UserIO io = new UserIOConsoleImpl();
         FlooringMasteryView view = new FlooringMasteryView(io);
-        OrderDaoFileImpl orderDao = new OrderDaoFileImpl();
-        ProductDaoFileImpl productDao = new ProductDaoFileImpl();
-        StateTaxDaoFileImpl statesDao = new StateTaxDaoFileImpl();
-        FlooringMasteryServiceLayerImpl service = new FlooringMasteryServiceLayerImpl(orderDao, productDao, statesDao);
+        OrderDao orderDao = new OrderDaoFileImpl();
+        ProductDao productDao = new ProductDaoFileImpl();
+        StateTaxDao statesDao = new StateTaxDaoFileImpl();
+        FlooringMasteryService service = new FlooringMasteryServiceLayerImpl(orderDao, productDao, statesDao);
         FlooringMasteryController controller = new FlooringMasteryController(service, view);
         controller.run();
         

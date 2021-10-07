@@ -2,6 +2,7 @@ package com.sg.ramimans.flooringmastery.model;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Objects;
 
 /**
  *
@@ -128,6 +129,75 @@ public class Order {
     
     public void setOrderId(int id) {
         this.orderId = id;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 89 * hash + this.orderId;
+        hash = 89 * hash + Objects.hashCode(this.customerName);
+        hash = 89 * hash + Objects.hashCode(this.stateCode);
+        hash = 89 * hash + Objects.hashCode(this.productName);
+        hash = 89 * hash + Objects.hashCode(this.productRate);
+        hash = 89 * hash + Objects.hashCode(this.productLabourRate);
+        hash = 89 * hash + Objects.hashCode(this.stateTaxRate);
+        hash = 89 * hash + Objects.hashCode(this.area);
+        hash = 89 * hash + Objects.hashCode(this.materialCost);
+        hash = 89 * hash + Objects.hashCode(this.labourCost);
+        hash = 89 * hash + Objects.hashCode(this.tax);
+        hash = 89 * hash + Objects.hashCode(this.total);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Order other = (Order) obj;
+        if (this.orderId != other.orderId) {
+            return false;
+        }
+        if (!Objects.equals(this.customerName, other.customerName)) {
+            return false;
+        }
+        if (!Objects.equals(this.stateCode, other.stateCode)) {
+            return false;
+        }
+        if (!Objects.equals(this.productName, other.productName)) {
+            return false;
+        }
+        if (!Objects.equals(this.productRate, other.productRate)) {
+            return false;
+        }
+        if (!Objects.equals(this.productLabourRate, other.productLabourRate)) {
+            return false;
+        }
+        if (!Objects.equals(this.stateTaxRate, other.stateTaxRate)) {
+            return false;
+        }
+        if (!Objects.equals(this.area, other.area)) {
+            return false;
+        }
+        if (!Objects.equals(this.materialCost, other.materialCost)) {
+            return false;
+        }
+        if (!Objects.equals(this.labourCost, other.labourCost)) {
+            return false;
+        }
+        if (!Objects.equals(this.tax, other.tax)) {
+            return false;
+        }
+        if (!Objects.equals(this.total, other.total)) {
+            return false;
+        }
+        return true;
     }
     
     
