@@ -25,10 +25,17 @@ import java.util.Set;
  * purpose: 
  */
 public class OrderDaoFileImpl implements OrderDao {
-    public String inventoryFile;
+    public String inventoryFileFormat = "Orders/Orders_";
     public static final String DELIMITER = "::";
     public final Map<String, Order> orders = new HashMap<>();
     
+    public OrderDaoFileImpl() {
+        
+    }
+    
+    public OrderDaoFileImpl(String FileFormat) {
+        this.inventoryFileFormat = FileFormat;
+    }
     
     private void loadOrders(LocalDate date) throws DaoException {
         Scanner fileInput;
@@ -36,7 +43,7 @@ public class OrderDaoFileImpl implements OrderDao {
         String orderDate = date.format(formatter);
         this.orders.clear();
         try {
-            fileInput = new Scanner(new BufferedReader(new FileReader("Orders/Orders_" + orderDate + ".txt")));
+            fileInput = new Scanner(new BufferedReader(new FileReader(this.inventoryFileFormat + orderDate + ".txt")));
         } catch (FileNotFoundException e) {
             throw new DaoException("Could not find data file for date " + orderDate, e);
         }
@@ -70,7 +77,7 @@ public class OrderDaoFileImpl implements OrderDao {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMddyyyy");
         String orderDate = date.format(formatter);
         try {
-            fileOutput = new PrintWriter(new FileWriter("Orders/Orders_" + orderDate + ".txt"));
+            fileOutput = new PrintWriter(new FileWriter(this.inventoryFileFormat + orderDate + ".txt"));
         } catch (IOException e) {
             throw new DaoException("Error occured while writing to file", e);
         }
