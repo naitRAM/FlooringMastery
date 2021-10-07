@@ -51,8 +51,14 @@ public class FlooringMasteryController {
                 break;
                 case 2:
                     try {
-                    Order processedOrder = service.processNewOrder(view.getNewOrder(products, states), view.getFutureDate());
-                    System.out.println("Success! Added order #" + processedOrder.getOrderId());
+                    LocalDate addDate = view.getFutureDate();
+                    
+                    Order orderToAdd = view.getNewOrder(products, states); 
+                    if (view.confirmAddOrder(orderToAdd, addDate)) {
+                        Order processedOrder = service.processNewOrder(orderToAdd, addDate);
+                        System.out.println("Success! Added order #" + processedOrder.getOrderId());
+                    }
+                    
                 } catch (InvalidDateException | InvalidStateException | InvalidProductException | InsufficientAreaException | InvalidCustomerNameException e) {
                     System.out.println(e.getMessage());
 
@@ -61,8 +67,12 @@ public class FlooringMasteryController {
                 case 3:
                     try {
                     LocalDate editDate = view.getFutureDate();
-                    Order editedOrder = service.editOrder(view.getEditedOrder(service.getAllOrders(editDate), states, products), editDate);
-                    System.out.println("Success! Edited order #" + editedOrder.getOrderId());
+                    Order editedOrder = view.getEditedOrder(service.getAllOrders(editDate), states, products);
+                    if (view.confirmEditOrder(editedOrder, editDate)) {
+                        Order processedOrder = service.editOrder(editedOrder, editDate);
+                        System.out.println("Success! Edited order #" + processedOrder.getOrderId());
+                    }
+                    
                 } catch (NoRecordsException | OrderNotFoundException | InvalidStateException | InvalidDateException | InvalidProductException | InsufficientAreaException e) {
                     System.out.println(e.getMessage());
                 }
@@ -70,9 +80,11 @@ public class FlooringMasteryController {
                 case 4:
                     try {
                     LocalDate deleteDate = view.getFutureDate();              
-                    Order orderToDelete = view.getOrderToDelete(service.getAllOrders(deleteDate));                 
-                    Order deletedOrder = service.deleteOrder(orderToDelete, deleteDate);
-                    System.out.println("Success! Deleted order #" + deletedOrder.getOrderId());
+                    Order orderToDelete = view.getOrderToDelete(service.getAllOrders(deleteDate)); 
+                    if (view.confirmDeleteOrder(orderToDelete, deleteDate)) {
+                        Order deletedOrder = service.deleteOrder(orderToDelete, deleteDate);
+                        System.out.println("Success! Deleted order #" + deletedOrder.getOrderId());
+                    }
                 } catch (NoRecordsException | OrderNotFoundException e) {
                     System.out.println(e.getMessage());
                 }

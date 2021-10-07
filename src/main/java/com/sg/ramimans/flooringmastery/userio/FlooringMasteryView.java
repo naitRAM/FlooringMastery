@@ -6,6 +6,7 @@ import com.sg.ramimans.flooringmastery.model.StateTax;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 
 /**
@@ -21,6 +22,7 @@ public class FlooringMasteryView {
     }
 
     public int displayMenuAndGetSelection() {
+        io.print("");
         io.print("Flooring Program");
         io.print("1. Display Orders");
         io.print("2. Add an Order");
@@ -29,52 +31,25 @@ public class FlooringMasteryView {
         io.print("5. Export All Data");
         io.print("6. Quit");
         io.print("");
-        return io.readInt("Choose a menu item (1-6):", 1, 6);
+        int userSelection = io.readInt("Choose a menu item (1-6):", 1, 6);
+        io.print("");
+        return userSelection;
+             
     }
 
     public void displayAllOrders(Collection<Order> orders) {
+        io.print("");
         for (Order order : orders) {
+            
             io.print(order.getOrderId() + " " + order.getCustomerName() + " " + order.getTotal());
         }
+        io.print("");
     }
-
-    public LocalDate getDate() {
-        return io.readLocalDate("Enter a  date in YYYY-MM-DD format: ");
-    }
-
-    public LocalDate getFutureDate() {
-        return io.readFutureLocalDate("Enter order date in YYYY-MM-DD format (must be in future):");
-    }
-
-    public Order getNewOrder(Collection<Product> products, Collection<StateTax> states) {
-
-        String customerName = io.readString("Enter customer name:");
-        
-        this.displayAvailableStates(states);
-        
-        StateTax orderState = null;
-        while (orderState == null) {
-            String stateCode = io.readString("Enter a valid state code:");
-            orderState = this.getState(states, stateCode);
-        }
-        
-        this.displayAvailableProducts(products);
-        
-        Product orderProduct = null;
-        while (orderProduct == null) {
-            String productName = io.readString("Enter a valid product: ");
-            orderProduct = this.getProduct(products, productName);
-        }
-        
-        BigDecimal area = io.readBigDecimalGreaterOrEqual("Enter area (minimum of 100 sq ft): ", new BigDecimal("100"));
-        Order newOrder = new Order(customerName, orderState, orderProduct, area);
-        return newOrder;
-    }
-     
+    
     public void displayAvailableProducts(Collection<Product> products) {
         io.print("Available products include: ");
         for (Product product : products) {
-            io.print(product.getProduct() + "   " + "Material cost per sq ft: $" + product.getCost() + "   " + "Labour cost per sq ft: $" + product.getLabour());
+            io.print(product.getProduct() + "   " + "$ / sq ft: " + product.getCost() + "   " + "Labour $ / sq ft: " + product.getLabour());
         }
     }
 
@@ -85,7 +60,83 @@ public class FlooringMasteryView {
         }
     }
     
+    public LocalDate getDate() {
+        return io.readLocalDate("Enter a  date in YYYY-MM-DD format: ");
+    }
+
+    public LocalDate getFutureDate() {
+        return io.readFutureLocalDate("Enter order date in YYYY-MM-DD format (must be in future):");
+    }
     
+    private boolean printOrderInfoAndConfirm(Order order, LocalDate date, String message){
+        io.print("Customer name: " + order.getCustomerName());
+        io.print("Order date: " + date.format(DateTimeFormatter.ofPattern("MM-dd-yyyy")));
+        io.print("Order State: " + order.getStateCode());
+        io.print("Order Product: " + order.getProductName());
+        io.print("Order Dimensions: " + order.getArea());
+        io.print("Product cost: $" + order.getMaterialCost() + "  ($" + order.getProductRate() + " / sq ft)" );
+        io.print("Labour cost: $" + order.getLabourCost() + "  ($" + order.getProductLabourRate() + " / sq ft");
+        io.print("Net Total: $" + order.getMaterialCost().add(order.getLabourCost()));
+        io.print("Tax: $" + order.getTax() + "  (" + order.getStateCode() + " @ " + order.getStateTaxRate() + "%)");
+        io.print("Total: $" + order.getTotal());
+        io.print("");
+        String userResponse = io.readString(message + " (Y/N)");
+        if (userResponse.equalsIgnoreCase("y")) {
+            return true;
+        }
+        return false;
+    }
+    
+    public boolean confirmAddOrder(Order order, LocalDate date) {
+        String confirmationMessage = "Are you sure you want to add this order?";
+        io.print("NEW ORDER");
+        io.print("");
+        return this.printOrderInfoAndConfirm(order, date, confirmationMessage);
+    }
+    
+    public boolean confirmEditOrder(Order order, LocalDate date) {
+        String confirmationMessage = "Are you sure you want to edit order #" + order.getOrderId() + "?";
+        io.print("EDITED ORDER DETAILS" + "\n");
+        io.print("");
+        io.print("Order ID: " + order.getOrderId());
+         return this.printOrderInfoAndConfirm(order, date, confirmationMessage); 
+    }
+    
+    public boolean confirmDeleteOrder(Order order, LocalDate date) {
+        String confirmationMessage = "Are you sure you want to delete order #" + order.getOrderId() + "?";
+        io.print("ORDER " + "\n");
+        return this.printOrderInfoAndConfirm(order, date, confirmationMessage); 
+    }
+
+    public Order getNewOrder(Collection<Product> products, Collection<StateTax> states) {
+        io.print("");
+        String customerName = io.readString("Enter customer name:");
+        
+        io.print("");
+        this.displayAvailableStates(states);
+        
+        io.print("");
+        StateTax orderState = null;
+        while (orderState == null) {
+            String stateCode = io.readString("Enter a valid state code:");
+            orderState = this.getState(states, stateCode);
+        }
+        
+        io.print("");
+        this.displayAvailableProducts(products);
+        
+        io.print("");
+        Product orderProduct = null;
+        while (orderProduct == null) {
+            String productName = io.readString("Enter a valid product: ");
+            orderProduct = this.getProduct(products, productName);
+        }
+        
+        io.print("");
+        BigDecimal area = io.readBigDecimalGreaterOrEqual("Enter area (minimum of 100 sq ft): ", new BigDecimal("100"));
+        Order newOrder = new Order(customerName, orderState, orderProduct, area);
+        return newOrder;
+    }
     
     public Order getEditedOrder(Collection<Order> orders, Collection<StateTax> states, Collection<Product> products) {
         
