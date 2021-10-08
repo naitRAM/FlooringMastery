@@ -10,6 +10,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
+import org.springframework.stereotype.Component;
 
 /**
  *
@@ -18,6 +19,7 @@ import java.util.Scanner;
  * data: Sep. 27, 2021
  * purpose: 
  */
+@Component
 public class StateTaxDaoFileImpl implements StateTaxDao {
     private String DELIMITER = ",";
     private String fileName;

@@ -8,6 +8,8 @@ import java.math.RoundingMode;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  *
@@ -16,9 +18,11 @@ import java.util.Map;
  * data: Oct. 7, 2021
  * purpose: 
  */
+@Component
 public class StateTaxDaoStubImpl implements StateTaxDao{
     Map<String, StateTax> states = new HashMap<>();
     
+    @Autowired
     public StateTaxDaoStubImpl() {
         String firstStateCode = "GA";
         String firstStateName = "Georgia";

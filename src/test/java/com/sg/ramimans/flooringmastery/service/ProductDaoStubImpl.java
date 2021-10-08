@@ -8,16 +8,19 @@ import java.math.RoundingMode;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  *
  * @author Rami Mansieh email: rmansieh@gmail.com data: Oct. 7, 2021 purpose:
  */
+@Component
 public class ProductDaoStubImpl implements ProductDao {
 
     Map<String, Product> products = new HashMap<>();
     
-
+    @Autowired
     public ProductDaoStubImpl() {
         String firstProductName = "Straw";
         BigDecimal firstProductRate = new BigDecimal("0.50").setScale(2, RoundingMode.HALF_UP);

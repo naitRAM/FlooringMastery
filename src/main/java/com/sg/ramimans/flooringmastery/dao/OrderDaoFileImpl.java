@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
+import org.springframework.stereotype.Component;
 
 /**
  *
@@ -24,6 +25,7 @@ import java.util.Set;
  * data: Sep. 26, 2021
  * purpose: 
  */
+@Component
 public class OrderDaoFileImpl implements OrderDao {
     public String inventoryFileFormat = "Orders/Orders_";
     public static final String DELIMITER = "::";

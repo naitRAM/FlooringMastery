@@ -1,1 +1,8 @@
+com\sg\ramimans\flooringmastery\service\AuditDaoStubImpl.class
+com\sg\ramimans\flooringmastery\dao\ProductDaoFileImplTest.class
+com\sg\ramimans\flooringmastery\dao\StateTaxDaoFileImplTest.class
 com\sg\ramimans\flooringmastery\dao\OrderDaoFileImplTest.class
+com\sg\ramimans\flooringmastery\service\ProductDaoStubImpl.class
+com\sg\ramimans\flooringmastery\service\OrderDaoStubImpl.class
+com\sg\ramimans\flooringmastery\service\FlooringMasteryServiceLayerImplTest.class
+com\sg\ramimans\flooringmastery\service\StateTaxDaoStubImpl.class

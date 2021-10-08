@@ -2,6 +2,7 @@ package com.sg.ramimans.flooringmastery.service;
 
 import com.sg.ramimans.flooringmastery.dao.AuditDao;
 import com.sg.ramimans.flooringmastery.dao.DaoException;
+import org.springframework.stereotype.Component;
 
 /**
  *
@@ -10,6 +11,7 @@ import com.sg.ramimans.flooringmastery.dao.DaoException;
  * data: Oct. 8, 2021
  * purpose: 
  */
+@Component
 public class AuditDaoStubImpl implements AuditDao {
 
     @Override

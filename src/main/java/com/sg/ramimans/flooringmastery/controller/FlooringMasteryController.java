@@ -16,16 +16,20 @@ import com.sg.ramimans.flooringmastery.userio.FlooringMasteryView;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Scanner;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  *
  * @author Rami Mansieh email: rmansieh@gmail.com data: Sep. 29, 2021 purpose:
  */
+@Component
 public class FlooringMasteryController {
 
     private final FlooringMasteryService service;
     private final FlooringMasteryView view;
-
+    
+    @Autowired
     public FlooringMasteryController(FlooringMasteryService service, FlooringMasteryView view) {
         this.service = service;
         this.view = view;

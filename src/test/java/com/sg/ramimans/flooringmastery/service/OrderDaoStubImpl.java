@@ -10,6 +10,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  *
@@ -18,10 +20,13 @@ import java.util.Set;
  * data: Oct. 7, 2021
  * purpose: 
  */
+@Component
 public class OrderDaoStubImpl implements OrderDao {
 
+    
     public Order onlyOrder ;
     
+    @Autowired
     public OrderDaoStubImpl() {
         int orderId = 1;
         String customerName = "Robert Paulson";
@@ -34,6 +39,7 @@ public class OrderDaoStubImpl implements OrderDao {
         this.onlyOrder = new Order(orderId, customerName, stateCode, stateTaxRate,
         productName, productRate, productLabourRate, area); 
     }
+    
     
     public OrderDaoStubImpl(Order order) {
         this.onlyOrder = order;

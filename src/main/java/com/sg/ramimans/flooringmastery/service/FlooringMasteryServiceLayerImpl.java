@@ -17,18 +17,22 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 import java.util.Locale;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  *
  * @author Rami Mansieh email: rmansieh@gmail.com data: Sep. 27, 2021 purpose:
  */
+@Component
 public class FlooringMasteryServiceLayerImpl implements FlooringMasteryService {
 
     private final OrderDao orderDao;
     private final ProductDao productDao;
     private final StateTaxDao statesDao;
     private final AuditDao auditDao;
-
+    
+    @Autowired
     public FlooringMasteryServiceLayerImpl(OrderDao orderDao, ProductDao productDao, StateTaxDao statesDao, AuditDao auditDao) {
         this.orderDao = orderDao;
         this.productDao = productDao;

@@ -4,6 +4,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDateTime;
+import org.springframework.stereotype.Component;
 
 /**
  *
@@ -12,6 +13,7 @@ import java.time.LocalDateTime;
  * data: Oct. 8, 2021
  * purpose: 
  */
+@Component
 public class AuditDaoFileImpl implements AuditDao{
     
     private final String FILE_NAME = "Audit/audit.txt";

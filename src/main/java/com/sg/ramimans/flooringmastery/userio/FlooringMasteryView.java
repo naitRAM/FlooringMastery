@@ -8,15 +8,19 @@ import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Collection;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  *
  * @author Rami Mansieh email: rmansieh@gmail.com data: Oct. 2, 2021 purpose:
  */
+@Component
 public class FlooringMasteryView {
 
     UserIO io;
-
+    
+    @Autowired
     public FlooringMasteryView(UserIO io) {
         this.io = io;
     }

@@ -5,11 +5,13 @@ import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.Scanner;
+import org.springframework.stereotype.Component;
 
 /**
  *
  * @author Rami Mansieh (only the last 4 methods) email: rmansieh@gmail.com data: Aug. 18, 2021 purpose:
  */
+@Component
 public class UserIOConsoleImpl implements UserIO {
 
     final private Scanner console = new Scanner(System.in);

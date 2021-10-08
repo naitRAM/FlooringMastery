@@ -5,8 +5,8 @@
  */
 package com.sg.ramimans.flooringmastery.service;
 
+import com.sg.ramimans.flooringmastery.controller.FlooringMasteryController;
 import com.sg.ramimans.flooringmastery.dao.AuditDao;
-import com.sg.ramimans.flooringmastery.dao.AuditDaoFileImpl;
 import com.sg.ramimans.flooringmastery.dao.DaoException;
 import com.sg.ramimans.flooringmastery.dao.OrderDao;
 import com.sg.ramimans.flooringmastery.dao.ProductDao;
@@ -20,6 +20,7 @@ import java.time.LocalDate;
 import java.util.Collection;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 /**
  *
@@ -30,12 +31,17 @@ public class FlooringMasteryServiceLayerImplTest {
     FlooringMasteryService service;
 
     public FlooringMasteryServiceLayerImplTest() {
+       /*
         OrderDao orderDao = new OrderDaoStubImpl();
         ProductDao productDao = new ProductDaoStubImpl();
         StateTaxDao statesDao = new StateTaxDaoStubImpl();
         AuditDao auditDao = new AuditDaoStubImpl();
-
-        this.service = new FlooringMasteryServiceLayerImpl(orderDao, productDao, statesDao, auditDao);
+        */
+        AnnotationConfigApplicationContext appContext = new AnnotationConfigApplicationContext();
+        appContext.scan("com.sg.ramimans.flooringmastery.service");
+        appContext.refresh();
+        this.service = appContext.getBean("flooringMasteryServiceLayerImpl", FlooringMasteryService.class);
+        //this.service = new FlooringMasteryServiceLayerImpl(orderDao, productDao, statesDao, auditDao);
     }
 
     @Test

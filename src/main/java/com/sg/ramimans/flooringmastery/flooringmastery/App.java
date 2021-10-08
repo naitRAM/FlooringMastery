@@ -1,20 +1,9 @@
 package com.sg.ramimans.flooringmastery.flooringmastery;
 
 import com.sg.ramimans.flooringmastery.dao.DaoException;
-import com.sg.ramimans.flooringmastery.dao.OrderDaoFileImpl;
-import com.sg.ramimans.flooringmastery.dao.ProductDaoFileImpl;
-import com.sg.ramimans.flooringmastery.dao.StateTaxDaoFileImpl;
-import com.sg.ramimans.flooringmastery.service.FlooringMasteryServiceLayerImpl;
 import com.sg.ramimans.flooringmastery.controller.FlooringMasteryController;
-import com.sg.ramimans.flooringmastery.dao.AuditDao;
-import com.sg.ramimans.flooringmastery.dao.AuditDaoFileImpl;
-import com.sg.ramimans.flooringmastery.dao.OrderDao;
-import com.sg.ramimans.flooringmastery.dao.ProductDao;
-import com.sg.ramimans.flooringmastery.dao.StateTaxDao;
-import com.sg.ramimans.flooringmastery.service.FlooringMasteryService;
-import com.sg.ramimans.flooringmastery.userio.FlooringMasteryView;
-import com.sg.ramimans.flooringmastery.userio.UserIO;
-import com.sg.ramimans.flooringmastery.userio.UserIOConsoleImpl;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
  *
@@ -23,7 +12,7 @@ import com.sg.ramimans.flooringmastery.userio.UserIOConsoleImpl;
 public class App {
 
     public static void main(String[] args) throws DaoException {
-        
+        /*
         UserIO io = new UserIOConsoleImpl();
         FlooringMasteryView view = new FlooringMasteryView(io);
         OrderDao orderDao = new OrderDaoFileImpl();
@@ -32,6 +21,11 @@ public class App {
         AuditDao auditDao = new AuditDaoFileImpl();
         FlooringMasteryService service = new FlooringMasteryServiceLayerImpl(orderDao, productDao, statesDao, auditDao);
         FlooringMasteryController controller = new FlooringMasteryController(service, view);
+        */
+        AnnotationConfigApplicationContext appContext = new AnnotationConfigApplicationContext();
+        appContext.scan("com.sg.ramimans.flooringmastery");
+        appContext.refresh();
+        FlooringMasteryController  controller = appContext.getBean("flooringMasteryController", FlooringMasteryController.class);
         controller.run();
         
         
