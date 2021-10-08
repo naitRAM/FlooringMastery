@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Collection;
@@ -49,11 +50,11 @@ public class OrderDaoFileImplTest {
         int orderId = 1;
         String customerName = "Robert Paulson";
         String stateCode = "GA";
-        BigDecimal stateTaxRate = new BigDecimal("5.00");
+        BigDecimal stateTaxRate = new BigDecimal("5.00").setScale(2, RoundingMode.HALF_UP);
         String productName = "Straw";
-        BigDecimal productRate = new BigDecimal("0.50");
-        BigDecimal productLabourRate = new BigDecimal("0.25");
-        BigDecimal area = new BigDecimal("450.00");
+        BigDecimal productRate = new BigDecimal("0.50").setScale(2, RoundingMode.HALF_UP);
+        BigDecimal productLabourRate = new BigDecimal("0.25").setScale(2, RoundingMode.HALF_UP);
+        BigDecimal area = new BigDecimal("450.00").setScale(2, RoundingMode.HALF_UP);
         Order testOrder = new Order(orderId, customerName, stateCode, stateTaxRate,
                 productName, productRate, productLabourRate, area);
         testDao.addOrder(testOrder, LocalDate.now());
@@ -70,10 +71,10 @@ public class OrderDaoFileImplTest {
         int orderId = 1;
         String customerName = "Robert Paulson";
         String stateCode = "GA";
-        BigDecimal stateTaxRate = new BigDecimal("5.00");
+        BigDecimal stateTaxRate = new BigDecimal("5.00").setScale(2, RoundingMode.HALF_UP);
         String productName = "Straw";
-        BigDecimal productRate = new BigDecimal("0.50");
-        BigDecimal productLabourRate = new BigDecimal("0.25");
+        BigDecimal productRate = new BigDecimal("0.50").setScale(2, RoundingMode.HALF_UP);
+        BigDecimal productLabourRate = new BigDecimal("0.25").setScale(2, RoundingMode.HALF_UP);
         BigDecimal area = new BigDecimal("450.00");
         Order testOrder = new Order(orderId, customerName, stateCode, stateTaxRate,
                 productName, productRate, productLabourRate, area);
@@ -82,11 +83,11 @@ public class OrderDaoFileImplTest {
         int orderId2 = 2;
         String customerName2 = "Marla Singer";
         String stateCode2 = "MA";
-        BigDecimal stateTaxRate2 = new BigDecimal("7.00");
+        BigDecimal stateTaxRate2 = new BigDecimal("7.00").setScale(2, RoundingMode.HALF_UP);
         String productName2 = "Laminate";
-        BigDecimal productRate2 = new BigDecimal("4.00");
-        BigDecimal productLabourRate2 = new BigDecimal("2.50");
-        BigDecimal area2 = new BigDecimal("200.00");
+        BigDecimal productRate2 = new BigDecimal("4.00").setScale(2, RoundingMode.HALF_UP);
+        BigDecimal productLabourRate2 = new BigDecimal("2.50").setScale(2, RoundingMode.HALF_UP);
+        BigDecimal area2 = new BigDecimal("200.00").setScale(2, RoundingMode.HALF_UP);
         Order testOrder2 = new Order(orderId2, customerName2, stateCode2, stateTaxRate2,
                 productName2, productRate2, productLabourRate2, area2);
         testDao.addOrder(testOrder2, LocalDate.now());
@@ -106,11 +107,11 @@ public class OrderDaoFileImplTest {
         int orderId = 1;
         String customerName = "Robert Paulson";
         String stateCode = "GA";
-        BigDecimal stateTaxRate = new BigDecimal("5.00");
+        BigDecimal stateTaxRate = new BigDecimal("5.00").setScale(2, RoundingMode.HALF_UP);
         String productName = "Straw";
-        BigDecimal productRate = new BigDecimal("0.50");
-        BigDecimal productLabourRate = new BigDecimal("0.25");
-        BigDecimal area = new BigDecimal("450.00");
+        BigDecimal productRate = new BigDecimal("0.50").setScale(2, RoundingMode.HALF_UP);
+        BigDecimal productLabourRate = new BigDecimal("0.25").setScale(2, RoundingMode.HALF_UP);
+        BigDecimal area = new BigDecimal("450.00").setScale(2, RoundingMode.HALF_UP);
         Order testOrder = new Order(orderId, customerName, stateCode, stateTaxRate,
                 productName, productRate, productLabourRate, area);
         testDao.addOrder(testOrder, LocalDate.now());
@@ -118,11 +119,11 @@ public class OrderDaoFileImplTest {
         
         String newCustomerName = "Marla Singer";
         String newStateCode = "MA";
-        BigDecimal newStateTaxRate = new BigDecimal("7.00");
+        BigDecimal newStateTaxRate = new BigDecimal("7.00").setScale(2, RoundingMode.HALF_UP);
         String newProductName = "Laminate";
-        BigDecimal newProductRate = new BigDecimal("4.00");
-        BigDecimal newProductLabourRate = new BigDecimal("2.50");
-        BigDecimal newArea = new BigDecimal("200.00");
+        BigDecimal newProductRate = new BigDecimal("4.00").setScale(2, RoundingMode.HALF_UP);
+        BigDecimal newProductLabourRate = new BigDecimal("2.50").setScale(2, RoundingMode.HALF_UP);
+        BigDecimal newArea = new BigDecimal("200.00").setScale(2, RoundingMode.HALF_UP);
         Order updatedOrder = new Order(orderId, newCustomerName, newStateCode, newStateTaxRate,
                 newProductName, newProductRate, newProductLabourRate, newArea);
         
@@ -138,11 +139,11 @@ public class OrderDaoFileImplTest {
         int orderId = 1;
         String customerName = "Robert Paulson";
         String stateCode = "GA";
-        BigDecimal stateTaxRate = new BigDecimal("5.00");
+        BigDecimal stateTaxRate = new BigDecimal("5.00").setScale(2, RoundingMode.HALF_UP);
         String productName = "Straw";
-        BigDecimal productRate = new BigDecimal("0.50");
-        BigDecimal productLabourRate = new BigDecimal("0.25");
-        BigDecimal area = new BigDecimal("450.00");
+        BigDecimal productRate = new BigDecimal("0.50").setScale(2, RoundingMode.HALF_UP);
+        BigDecimal productLabourRate = new BigDecimal("0.25").setScale(2, RoundingMode.HALF_UP);
+        BigDecimal area = new BigDecimal("450.00").setScale(2, RoundingMode.HALF_UP);
         Order testOrder = new Order(orderId, customerName, stateCode, stateTaxRate,
                 productName, productRate, productLabourRate, area);
         testDao.addOrder(testOrder, LocalDate.now());

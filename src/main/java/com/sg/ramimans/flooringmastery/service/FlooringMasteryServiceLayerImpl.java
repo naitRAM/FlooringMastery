@@ -38,7 +38,7 @@ public class FlooringMasteryServiceLayerImpl implements FlooringMasteryService {
     }
 
     private void validateCustomerName(Order customerOrder) throws InvalidCustomerNameException {
-        if (! customerOrder.getCustomerName().matches("^[A-Za-z0-9.,]+$")) {
+        if (! customerOrder.getCustomerName().matches("^[A-Za-z0-9., ]+$")) {
             throw new InvalidCustomerNameException("Customer name format is invalid");
         };
     }

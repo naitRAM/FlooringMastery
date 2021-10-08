@@ -4,6 +4,7 @@ import com.sg.ramimans.flooringmastery.dao.DaoException;
 import com.sg.ramimans.flooringmastery.dao.OrderDao;
 import com.sg.ramimans.flooringmastery.model.Order;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.HashMap;
@@ -17,24 +18,24 @@ import java.util.Set;
  * data: Oct. 7, 2021
  * purpose: 
  */
-public class FlooringMasteryOrderDaoStubImpl implements OrderDao {
+public class OrderDaoStubImpl implements OrderDao {
 
     public Order onlyOrder ;
     
-    public FlooringMasteryOrderDaoStubImpl() {
+    public OrderDaoStubImpl() {
         int orderId = 1;
         String customerName = "Robert Paulson";
         String stateCode = "GA";
-        BigDecimal stateTaxRate = new BigDecimal("5.00");
+        BigDecimal stateTaxRate = new BigDecimal("5.00").setScale(2, RoundingMode.HALF_UP);
         String productName = "Straw";
-        BigDecimal productRate = new BigDecimal("0.50");
-        BigDecimal productLabourRate = new BigDecimal("0.25");
-        BigDecimal area = new BigDecimal("450.00");
+        BigDecimal productRate = new BigDecimal("0.50").setScale(2, RoundingMode.HALF_UP);
+        BigDecimal productLabourRate = new BigDecimal("0.25").setScale(2, RoundingMode.HALF_UP);
+        BigDecimal area = new BigDecimal("450.00").setScale(2, RoundingMode.HALF_UP);
         this.onlyOrder = new Order(orderId, customerName, stateCode, stateTaxRate,
         productName, productRate, productLabourRate, area); 
     }
     
-    public FlooringMasteryOrderDaoStubImpl(Order order) {
+    public OrderDaoStubImpl(Order order) {
         this.onlyOrder = order;
     }
     @Override
@@ -55,11 +56,7 @@ public class FlooringMasteryOrderDaoStubImpl implements OrderDao {
 
     @Override
     public Order addOrder(Order order, LocalDate orderDate) throws DaoException {
-        if (onlyOrder.getOrderId() == order.getOrderId()) {
             return onlyOrder;
-        } else {
-            return null;
-        }
     }
 
     @Override
@@ -67,7 +64,7 @@ public class FlooringMasteryOrderDaoStubImpl implements OrderDao {
         if (onlyOrder.getOrderId() == order.getOrderId()) {
             return order;
         } else {
-            return order;
+            return null;
         }
     }
 
