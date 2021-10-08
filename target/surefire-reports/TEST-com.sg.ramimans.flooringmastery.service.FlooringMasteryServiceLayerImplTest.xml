@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="com.sg.ramimans.flooringmastery.service.FlooringMasteryServiceLayerImplTest" time="0.071" tests="17" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="com.sg.ramimans.flooringmastery.service.FlooringMasteryServiceLayerImplTest" time="0.063" tests="17" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.runtime.name" value="OpenJDK Runtime Environment"/>
     <property name="java.vm.version" value="11.0.11+9"/>
@@ -66,12 +66,12 @@
   </properties>
   <testcase name="testNewOrderInvalidArea" classname="com.sg.ramimans.flooringmastery.service.FlooringMasteryServiceLayerImplTest" time="0.032"/>
   <testcase name="testNewOrderInvalidDate" classname="com.sg.ramimans.flooringmastery.service.FlooringMasteryServiceLayerImplTest" time="0"/>
-  <testcase name="testDeleteOrder" classname="com.sg.ramimans.flooringmastery.service.FlooringMasteryServiceLayerImplTest" time="0.008"/>
-  <testcase name="testNewOrderInvalidProduct" classname="com.sg.ramimans.flooringmastery.service.FlooringMasteryServiceLayerImplTest" time="0.002"/>
+  <testcase name="testDeleteOrder" classname="com.sg.ramimans.flooringmastery.service.FlooringMasteryServiceLayerImplTest" time="0.031"/>
+  <testcase name="testNewOrderInvalidProduct" classname="com.sg.ramimans.flooringmastery.service.FlooringMasteryServiceLayerImplTest" time="0"/>
   <testcase name="testNewOrderInvalidState" classname="com.sg.ramimans.flooringmastery.service.FlooringMasteryServiceLayerImplTest" time="0"/>
   <testcase name="testGetState" classname="com.sg.ramimans.flooringmastery.service.FlooringMasteryServiceLayerImplTest" time="0"/>
   <testcase name="testGetValidEditOrder" classname="com.sg.ramimans.flooringmastery.service.FlooringMasteryServiceLayerImplTest" time="0"/>
-  <testcase name="testEditInvalidOrderNumber" classname="com.sg.ramimans.flooringmastery.service.FlooringMasteryServiceLayerImplTest" time="0.009"/>
+  <testcase name="testEditInvalidOrderNumber" classname="com.sg.ramimans.flooringmastery.service.FlooringMasteryServiceLayerImplTest" time="0"/>
   <testcase name="testNewOrderValid" classname="com.sg.ramimans.flooringmastery.service.FlooringMasteryServiceLayerImplTest" time="0"/>
   <testcase name="testGetProduct" classname="com.sg.ramimans.flooringmastery.service.FlooringMasteryServiceLayerImplTest" time="0"/>
   <testcase name="testGetAllOrders" classname="com.sg.ramimans.flooringmastery.service.FlooringMasteryServiceLayerImplTest" time="0"/>

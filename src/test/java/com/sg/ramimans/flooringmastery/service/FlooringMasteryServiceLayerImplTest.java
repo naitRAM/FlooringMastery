@@ -5,6 +5,8 @@
  */
 package com.sg.ramimans.flooringmastery.service;
 
+import com.sg.ramimans.flooringmastery.dao.AuditDao;
+import com.sg.ramimans.flooringmastery.dao.AuditDaoFileImpl;
 import com.sg.ramimans.flooringmastery.dao.DaoException;
 import com.sg.ramimans.flooringmastery.dao.OrderDao;
 import com.sg.ramimans.flooringmastery.dao.ProductDao;
@@ -31,8 +33,9 @@ public class FlooringMasteryServiceLayerImplTest {
         OrderDao orderDao = new OrderDaoStubImpl();
         ProductDao productDao = new ProductDaoStubImpl();
         StateTaxDao statesDao = new StateTaxDaoStubImpl();
+        AuditDao auditDao = new AuditDaoStubImpl();
 
-        this.service = new FlooringMasteryServiceLayerImpl(orderDao, productDao, statesDao);
+        this.service = new FlooringMasteryServiceLayerImpl(orderDao, productDao, statesDao, auditDao);
     }
 
     @Test
@@ -256,7 +259,8 @@ public class FlooringMasteryServiceLayerImplTest {
     }
     
     @Test
-    public void testDeleteInvalidOrder() throws Exception {
+    public void testDeleteInvalidOrder() {
+        
         int orderId = 2;
         String customerName = "Robert Paulson";
         String stateCode = "GA";
@@ -268,8 +272,15 @@ public class FlooringMasteryServiceLayerImplTest {
         Order invalidOrder = new Order(orderId, customerName, stateCode, stateTaxRate,
                 productName, productRate, productLabourRate, area);
         LocalDate date = LocalDate.now().plusDays(1);
-        Order deletedOrder = service.deleteOrder(invalidOrder, date);
-        assertNull(deletedOrder, "Deleting invalid order should return null");
+    
+        try {
+            Order deletedOrder = service.deleteOrder(invalidOrder, date);
+            fail("Deleting order with non-existent order Id should throw exception");
+        } catch (DaoException e) {
+            fail("Incorrect exception was thrown for deleting invalid order");
+        } catch (OrderNotFoundException e) {
+            return;
+        }
 
     }
     
