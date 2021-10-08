@@ -1,7 +1,6 @@
 package com.sg.ramimans.flooringmastery.controller;
 
 import com.sg.ramimans.flooringmastery.dao.DaoException;
-import com.sg.ramimans.flooringmastery.service.FlooringMasteryServiceLayerImpl;
 import com.sg.ramimans.flooringmastery.service.InsufficientAreaException;
 import com.sg.ramimans.flooringmastery.service.InvalidDateException;
 import com.sg.ramimans.flooringmastery.service.InvalidProductException;
@@ -14,8 +13,6 @@ import com.sg.ramimans.flooringmastery.model.StateTax;
 import com.sg.ramimans.flooringmastery.service.FlooringMasteryService;
 import com.sg.ramimans.flooringmastery.service.InvalidCustomerNameException;
 import com.sg.ramimans.flooringmastery.userio.FlooringMasteryView;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Scanner;
@@ -47,7 +44,7 @@ public class FlooringMasteryController {
                     try {
                     view.displayAllOrders(service.getAllOrders(view.getDate()));
                 } catch (NoRecordsException e) {
-                    System.out.println(e.getMessage());
+                    view.printMessage(e.getMessage());
                 }
                 break;
                 case 2:
@@ -57,12 +54,12 @@ public class FlooringMasteryController {
                     Order orderToAdd = view.getNewOrder(products, states); 
                     if (view.confirmAddOrder(orderToAdd, addDate)) {
                         Order processedOrder = service.processNewOrder(orderToAdd, addDate);
-                        System.out.println("Success! Added order #" + processedOrder.getOrderId());
+                        view.printMessage("Success! Added order #" + processedOrder.getOrderId());
                     }
                     
                 } catch (InvalidDateException | InvalidStateException | InvalidProductException 
                         | InsufficientAreaException | InvalidCustomerNameException e) {
-                    System.out.println(e.getMessage());
+                    view.printMessage(e.getMessage());
 
                 }
                 break;
@@ -72,13 +69,13 @@ public class FlooringMasteryController {
                     Order editedOrder = view.getEditedOrder(service.getAllOrders(editDate), states, products);
                     if (view.confirmEditOrder(editedOrder, editDate)) {
                         Order processedOrder = service.editOrder(editedOrder, editDate);
-                        System.out.println("Success! Edited order #" + processedOrder.getOrderId());
+                        view.printMessage("Success! Edited order #" + processedOrder.getOrderId());
                     }
                     
                 } catch (NoRecordsException | OrderNotFoundException | InvalidStateException | 
                         InvalidDateException | InvalidProductException | InsufficientAreaException 
                         | InvalidCustomerNameException e) {
-                    System.out.println(e.getMessage());
+                    view.printMessage(e.getMessage());
                 }
                 break;
                 case 4:
@@ -87,14 +84,14 @@ public class FlooringMasteryController {
                     Order orderToDelete = view.getOrderToDelete(service.getAllOrders(deleteDate)); 
                     if (view.confirmDeleteOrder(orderToDelete, deleteDate)) {
                         Order deletedOrder = service.deleteOrder(orderToDelete, deleteDate);
-                        System.out.println("Success! Deleted order #" + deletedOrder.getOrderId());
+                        view.printMessage("Success! Deleted order #" + deletedOrder.getOrderId());
                     }
                 } catch (NoRecordsException | OrderNotFoundException e) {
-                    System.out.println(e.getMessage());
+                    view.printMessage(e.getMessage());
                 }
                 break;
                 case 6:
-                    System.out.println("Thank you for using Flooring Program!");
+                    view.printMessage("Thank you for using Flooring Program!");
                     usingApp = false;
             }
 
