@@ -28,7 +28,7 @@ public class FlooringMasteryController {
 
     private final FlooringMasteryService service;
     private final FlooringMasteryView view;
-    
+
     @Autowired
     public FlooringMasteryController(FlooringMasteryService service, FlooringMasteryView view) {
         this.service = service;
@@ -41,64 +41,79 @@ public class FlooringMasteryController {
         Scanner userInput = new Scanner(System.in);
         Collection<Product> products = service.getAllProducts();
         Collection<StateTax> states = service.getAllStates();
+        
         while (usingApp) {
-            int userSelection = view.displayMenuAndGetSelection();
-            switch (userSelection) {
-                case 1:
-                    try {
-                    view.displayAllOrders(service.getAllOrders(view.getDate()));
-                } catch (NoRecordsException e) {
-                    view.printMessage(e.getMessage());
+            try {
+                int userSelection = view.displayMenuAndGetSelection();
+                switch (userSelection) {
+                    case 1:
+                        displayAllOrders();
+                        break;
+                    case 2:
+                        addOrder(products, states);
+                        break;
+                    case 3:
+                        editOrder(products, states);
+                        break;
+                    case 4:
+                        deleteOrder();
+                        break;
+                    case 6:
+                        usingApp = displayExitMessage();
                 }
-                break;
-                case 2:
-                    try {
-                    LocalDate addDate = view.getFutureDate();
-                    
-                    Order orderToAdd = view.getNewOrder(products, states); 
-                    if (view.confirmAddOrder(orderToAdd, addDate)) {
-                        Order processedOrder = service.processNewOrder(orderToAdd, addDate);
-                        view.printMessage("Success! Added order #" + processedOrder.getOrderId());
-                    }
-                    
-                } catch (InvalidDateException | InvalidStateException | InvalidProductException 
-                        | InsufficientAreaException | InvalidCustomerNameException e) {
-                    view.printMessage(e.getMessage());
 
-                }
-                break;
-                case 3:
-                    try {
-                    LocalDate editDate = view.getFutureDate();
-                    Order editedOrder = view.getEditedOrder(service.getAllOrders(editDate), states, products);
-                    if (view.confirmEditOrder(editedOrder, editDate)) {
-                        Order processedOrder = service.editOrder(editedOrder, editDate);
-                        view.printMessage("Success! Edited order #" + processedOrder.getOrderId());
-                    }
-                    
-                } catch (NoRecordsException | OrderNotFoundException | InvalidStateException | 
-                        InvalidDateException | InvalidProductException | InsufficientAreaException 
-                        | InvalidCustomerNameException e) {
-                    view.printMessage(e.getMessage());
-                }
-                break;
-                case 4:
-                    try {
-                    LocalDate deleteDate = view.getFutureDate();              
-                    Order orderToDelete = view.getOrderToDelete(service.getAllOrders(deleteDate)); 
-                    if (view.confirmDeleteOrder(orderToDelete, deleteDate)) {
-                        Order deletedOrder = service.deleteOrder(orderToDelete, deleteDate);
-                        view.printMessage("Success! Deleted order #" + deletedOrder.getOrderId());
-                    }
-                } catch (NoRecordsException | OrderNotFoundException e) {
-                    view.printMessage(e.getMessage());
-                }
-                break;
-                case 6:
-                    view.printMessage("Thank you for using Flooring Program!");
-                    usingApp = false;
+            } catch (NoRecordsException | OrderNotFoundException | InvalidStateException
+                    | InvalidDateException | InvalidProductException | InsufficientAreaException
+                    | InvalidCustomerNameException | DaoException e) {
+                displayErrorMessage(e.getMessage());
             }
-
         }
     }
+
+    private void displayAllOrders() throws NoRecordsException {
+        view.displayAllOrders(service.getAllOrders(view.getDate()));
+    }
+
+    private void addOrder(Collection<Product> products, Collection<StateTax> states)
+            throws InvalidDateException, InsufficientAreaException, InvalidStateException,
+            DaoException, InvalidProductException, InvalidCustomerNameException {
+        LocalDate addDate = view.getFutureDate();
+        Order orderToAdd = view.getNewOrder(products, states);
+        if (view.confirmAddOrder(orderToAdd, addDate)) {
+            Order processedOrder = service.processNewOrder(orderToAdd, addDate);
+            view.printMessage("Success! Added order #" + processedOrder.getOrderId());
+        }
+    }
+
+    private void editOrder(Collection<Product> products, Collection<StateTax> states)
+            throws NoRecordsException, DaoException, OrderNotFoundException,
+            InvalidProductException, InvalidStateException, InsufficientAreaException,
+            InvalidDateException, InvalidCustomerNameException {
+        LocalDate editDate = view.getFutureDate();
+        Order editedOrder = view.getEditedOrder(service.getAllOrders(editDate), states, products);
+        if (view.confirmEditOrder(editedOrder, editDate)) {
+            Order processedOrder = service.editOrder(editedOrder, editDate);
+            view.printMessage("Success! Edited order #" + processedOrder.getOrderId());
+        }
+    }
+
+    private void deleteOrder() throws NoRecordsException, DaoException, OrderNotFoundException {
+        LocalDate deleteDate = view.getFutureDate();
+        Order orderToDelete = view.getOrderToDelete(service.getAllOrders(deleteDate));
+        if (view.confirmDeleteOrder(orderToDelete, deleteDate)) {
+            Order deletedOrder = service.deleteOrder(orderToDelete, deleteDate);
+            view.printMessage("Success! Deleted order #" + deletedOrder.getOrderId());
+        }
+    }
+    
+    private void displayErrorMessage(String message) {
+        view.printMessage(message);
+    }
+    
+    private boolean displayExitMessage() {
+        view.printMessage("Thank you for using Flooring Program!");
+        return false;
+    }
+    
+    
 }

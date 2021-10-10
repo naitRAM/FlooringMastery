@@ -201,7 +201,7 @@ public class FlooringMasteryView {
         io.print("Order area in sq ft: " + validOrder.getArea());
         BigDecimal area = null;
         while (area == null) {
-            String areaString = io.readString("Enter updated area greater than 100 sq ft (Hit Enter to keep old entry: ");
+            String areaString = io.readString("Enter updated area greater than 100 sq ft (Hit Enter to keep old entry): ");
             if (areaString.isBlank()) {
                 area = validOrder.getArea();
             } else {
