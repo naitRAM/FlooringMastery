@@ -2,6 +2,7 @@ package com.sg.ramimans.flooringmastery.dao;
 
 import com.sg.ramimans.flooringmastery.model.Order;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -20,25 +21,23 @@ import org.springframework.stereotype.Component;
 
 /**
  *
- * @author Rami Mansieh
- * email: rmansieh@gmail.com
- * data: Sep. 26, 2021
- * purpose: 
+ * @author Rami Mansieh email: rmansieh@gmail.com data: Sep. 26, 2021 purpose:
  */
 @Component
 public class OrderDaoFileImpl implements OrderDao {
+
     public String inventoryFileFormat = "Orders/Orders_";
     public static final String DELIMITER = "::";
     public final Map<String, Order> orders = new HashMap<>();
-    
+
     public OrderDaoFileImpl() {
-        
+
     }
-    
+
     public OrderDaoFileImpl(String FileFormat) {
         this.inventoryFileFormat = FileFormat;
     }
-    
+
     private void loadOrders(LocalDate date) throws DaoException {
         Scanner fileInput;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMddyyyy");
@@ -49,7 +48,7 @@ public class OrderDaoFileImpl implements OrderDao {
         } catch (FileNotFoundException e) {
             throw new DaoException("Could not find data file for date " + orderDate, e);
         }
-        
+
         String currentLine;
         Order currentOrder;
         while (fileInput.hasNextLine()) {
@@ -58,8 +57,8 @@ public class OrderDaoFileImpl implements OrderDao {
             this.orders.put(Integer.toString(currentOrder.getOrderId()), currentOrder);
         }
     }
-    
-    private Order unmarshallOrder (String entry) {
+
+    private Order unmarshallOrder(String entry) {
         String[] entryArray = entry.split(DELIMITER);
         int orderNumber = Integer.parseInt(entryArray[0]);
         String customerName = entryArray[1];
@@ -71,9 +70,7 @@ public class OrderDaoFileImpl implements OrderDao {
         BigDecimal area = new BigDecimal(entryArray[5]).setScale(2, RoundingMode.HALF_UP);
         return new Order(orderNumber, customerName, state, taxRate, productType, costPerSquareFoot, labourCostPerSquareFoot, area);
     }
-    
-    
-    
+
     private void writeOrders(LocalDate date) throws DaoException {
         PrintWriter fileOutput;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMddyyyy");
@@ -92,7 +89,7 @@ public class OrderDaoFileImpl implements OrderDao {
         }
         fileOutput.close();
     }
-    
+
     private String marshallOrder(Order order) {
         String entry = "";
         entry += order.getOrderId() + DELIMITER;
@@ -109,21 +106,21 @@ public class OrderDaoFileImpl implements OrderDao {
         entry += order.getTotal();
         return entry;
     }
-    
+
     @Override
-    public Order getOrder(String Id, LocalDate date) throws DaoException{
+    public Order getOrder(String Id, LocalDate date) throws DaoException {
         this.loadOrders(date);
         return this.orders.get(Id);
     }
-    
+
     @Override
     public Collection<Order> getAllOrders(LocalDate orderDate) throws DaoException {
         this.loadOrders(orderDate);
         return this.orders.values();
     }
-    
+
     @Override
-    public Order addOrder(Order order, LocalDate date) throws DaoException{
+    public Order addOrder(Order order, LocalDate date) throws DaoException {
         try {
             this.getAllOrders(date);
         } catch (DaoException e) {
@@ -133,8 +130,8 @@ public class OrderDaoFileImpl implements OrderDao {
         int orderId = 1;
         for (String id : stringIds) {
             int numId = Integer.parseInt(id);
-            if ( numId >= orderId) {
-                orderId = numId +1 ;
+            if (numId >= orderId) {
+                orderId = numId + 1;
             }
         }
         order.setOrderId(orderId);
@@ -142,7 +139,7 @@ public class OrderDaoFileImpl implements OrderDao {
         this.writeOrders(date);
         return order;
     }
-    
+
     @Override
     public Order deleteOrder(String Id, LocalDate date) throws DaoException {
         this.loadOrders(date);
@@ -150,7 +147,7 @@ public class OrderDaoFileImpl implements OrderDao {
         this.writeOrders(date);
         return deletedOrder;
     }
-    
+
     @Override
     public Order editOrder(Order order, LocalDate date) throws DaoException {
         this.loadOrders(date);
@@ -163,5 +160,50 @@ public class OrderDaoFileImpl implements OrderDao {
         return this.orders.get(orderId);
     }
     
-    
+    @Override
+    public String exportOrders() throws DaoException {
+        String exportFile = "export_orders.txt";
+        File ordersFolder = new File("Orders/");
+        File[] orderFiles = ordersFolder.listFiles();
+        Scanner exportInput;
+        PrintWriter exportOutput;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMddyyyy");
+        try {
+            exportOutput = new PrintWriter(new FileWriter(exportFile));
+        } catch (IOException e) {
+            throw new DaoException("Error occured while writing to file", e);
+        }
+
+        for (File file : orderFiles) {
+            String fileName = file.getName();
+            String stringDate = fileName.substring(7, 15);
+            LocalDate ordersDate = LocalDate.parse(stringDate, formatter);
+            try {
+                exportInput = new Scanner(new BufferedReader(new FileReader("Orders/" + fileName)));
+            } catch (FileNotFoundException e) {
+                throw new DaoException("Could not find data file for date " + ordersDate, e);
+            }
+            if (exportInput.hasNextLine()) {
+                exportOutput.println("Orders dated " + ordersDate);
+                exportOutput.println();
+            } else {
+                // avoid printing blank lines for files with no orders
+                continue;
+            }
+            
+            while (exportInput.hasNextLine()) {
+                String orderRecord = exportInput.nextLine();
+                exportOutput.println(orderRecord);
+                exportOutput.flush();
+            }
+            
+            exportOutput.println();
+           
+        }
+        
+        exportOutput.close();
+        
+        return exportFile;
+    }
+
 }

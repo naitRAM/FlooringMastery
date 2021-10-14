@@ -58,6 +58,9 @@ public class FlooringMasteryController {
                     case 4:
                         deleteOrder();
                         break;
+                    case 5:
+                        exportOrders();
+                        break;
                     case 6:
                         usingApp = displayExitMessage();
                 }
@@ -115,5 +118,7 @@ public class FlooringMasteryController {
         return false;
     }
     
-    
+    private void exportOrders() throws DaoException {
+        view.printMessage("Success! Exported all orders to " + service.exportOrders());
+    }
 }

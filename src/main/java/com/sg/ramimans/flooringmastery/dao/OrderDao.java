@@ -19,4 +19,5 @@ public interface OrderDao {
     public Order addOrder(Order order, LocalDate orderDate) throws DaoException;
     public Order editOrder(Order order, LocalDate orderDate) throws DaoException;
     public Order deleteOrder(String orderId, LocalDate orderDate) throws DaoException;
+    public String exportOrders() throws DaoException;
 }

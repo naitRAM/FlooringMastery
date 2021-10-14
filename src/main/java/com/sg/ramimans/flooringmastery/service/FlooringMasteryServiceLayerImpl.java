@@ -175,5 +175,9 @@ public class FlooringMasteryServiceLayerImpl implements FlooringMasteryService {
         entry += order.getTotal();
         return entry;
     }
+    
+    public String exportOrders() throws DaoException {
+      return orderDao.exportOrders();
+    }
 
 }

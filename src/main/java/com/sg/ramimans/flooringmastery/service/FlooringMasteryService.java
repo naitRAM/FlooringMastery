@@ -39,4 +39,6 @@ public interface FlooringMasteryService {
     
     public Collection<StateTax> getAllStates() throws DaoException;
     
+    public String exportOrders() throws DaoException;
+    
 }
