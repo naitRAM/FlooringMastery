@@ -83,5 +83,10 @@ public class OrderDaoStubImpl implements OrderDao {
             
         }
     }
+    
+    @Override
+    public String exportOrders() {
+        return null;
+    }
 
 }

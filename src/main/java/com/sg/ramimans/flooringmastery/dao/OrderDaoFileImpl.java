@@ -200,9 +200,7 @@ public class OrderDaoFileImpl implements OrderDao {
             exportOutput.println();
            
         }
-        
         exportOutput.close();
-        
         return exportFile;
     }
 
